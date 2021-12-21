@@ -1,0 +1,16 @@
+---
+- name: CF OCA | Import assert.yml
+  ansible.builtin.import_tasks: assert.yml
+  run_once: yes
+  delegate_to: localhost
+
+- name: CF OCA | Include OS family of {{ ansible_os_family }} variables.
+  ansible.builtin.include_vars:
+    file: "{{ item }}.yml"
+  loop:
+    - main
+    - "{{ ansible_os_family }}"
+
+- include_tasks: setup.yml
+- include_tasks: certificate.yml
+- include_tasks: nginx.yml

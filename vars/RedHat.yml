@@ -1,0 +1,3 @@
+---
+cfca_repository_gpg_url: "{{ cfca_package_repository }}/pubkey.gpg"
+cfca_repository_app: "{{ cfca_package_repository }}/cloudflare-release-latest.el{{ ansible_distribution_major_version }}.rpm "

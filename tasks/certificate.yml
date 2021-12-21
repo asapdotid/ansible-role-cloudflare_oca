@@ -1,0 +1,32 @@
+---
+- name: CF OCA | Create directory for Cloudflare origin CA certificate
+  ansible.builtin.file:
+    path: "{{ cfca_origin_ca_ssl_path }}"
+    state: directory
+    mode: 0755
+
+- name: CF OCA | Add Cloudflare Origin CA root certificates
+  ansible.builtin.get_url:
+    url: "{{ cfca_origin_ca_root }}"
+    dest: "{{ cfca_origin_ca_ssl_path }}"
+    mode: 0600
+
+- name: CF OCA | Generate Cloudflare Origin CA
+  ansible.builtin.command: "cfca getcert \
+    -key-out {{ cfca_origin_ca_ssl_path }}/{{ item.name | quote }}.key \
+    -certificate-out {{ cfca_origin_ca_ssl_path }}/{{ item.name | quote }}.pem \
+    -days {{ item.days | default(5475) }} \
+    -hostnames {{ item.hostnames | join(',') }} \
+    -key-size {{ item.key_size | default(2048) }} \
+    -key-type {{ item.key_type | default('rsa') }} \
+    {{ '-overwrite' if item.overwrite }}"
+  args:
+    chdir: "{{ cfca_origin_ca_ssl_path }}"
+    creates: "{{ item.name }}.*"
+  environment:
+    CF_API_KEY: "{{ cfca_cloudflare_origin_ca_key | mandatory }}"
+  become: yes
+  become_user: root
+  no_log: "{{ cfca_origin_ca_no_log }}"
+  loop: "{{ cfca_origin_ca_sites_config }}"
+  register: cfca_create_origin_ca

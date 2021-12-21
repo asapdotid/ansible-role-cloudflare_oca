@@ -1,0 +1,20 @@
+---
+# Setup cfca configuration
+cfca_package_name: cfca
+cfca_package_state: latest
+
+# CloudFlare origin certificate configures
+cfca_origin_ca_root_type: rsa
+cfca_origin_ca_ssl_path: /etc/ssl/cloudflare
+cfca_cloudflare_origin_ca_key: ""
+cfca_origin_ca_no_log: false
+cfca_origin_ca_sites_config:
+  []
+  # - name: example.com
+  #   days: 5475
+  #   hostnames: ""
+  #   key_size: 4096
+  #   key_type: rsa
+  #   overwrite: false
+
+cfca_nginx_include_path: /etc/nginx/includes.d

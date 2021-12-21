@@ -1,0 +1,8 @@
+# {{ ansible_managed }}
+
+# Cloudflare Origin CA
+
+ssl_certificate {{ cfca_origin_ca_ssl_path }}/{{ item.name }}.pem;
+ssl_certificate_key {{ cfca_origin_ca_ssl_path }}/{{ item.name }}.key;
+ssl_client_certificate {{ cfca_origin_ca_ssl_path }}/origin_ca_{{ cfca_origin_ca_root_type }}_root.pem;
+ssl_verify_client on;

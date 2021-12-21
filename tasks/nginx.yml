@@ -1,0 +1,14 @@
+---
+- name: CF OCA | Ensure includes.d directories exist
+  ansible.builtin.file:
+    path: "{{ cfca_nginx_include_path }}/{{ item.name }}"
+    state: directory
+    mode: 0755
+  loop: "{{ cfca_origin_ca_sites_config }}"
+
+- name: CF OCA | Template Nginx SSL directives out to includes.d
+  ansible.builtin.template:
+    src: cloudflare-origin-ca.conf.j2
+    dest: "{{ cfca_nginx_include_path }}/{{ item.name }}/cloudflare-origin-ca.conf"
+    mode: 0600
+  loop: "{{ cfca_origin_ca_sites_config }}"

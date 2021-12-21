@@ -1,0 +1,23 @@
+---
+- name: CF OCA | Test if CloudFlare CA Key is set correctly
+  ansible.builtin.assert:
+    that:
+      - cfca_cloudflare_origin_ca_key is defined
+      - cfca_cloudflare_origin_ca_key is string
+      - cfca_cloudflare_origin_ca_key | length > 0
+    quiet: yes
+
+- name: CF OCA | Test if CloudFlare Origin Root CA Type is set correctly
+  ansible.builtin.assert:
+    that:
+      - cfca_origin_ca_root_type is defined
+      - cfca_origin_ca_root_type is string
+      - "cfca_origin_ca_root_type in (['rsa','ecc']|list)"
+    quiet: yes
+
+- name: CF OCA | Test if CloudFlare Origin Root CA sites is set correctly
+  ansible.builtin.assert:
+    that:
+      - cfca_origin_ca_sites_config is defined
+      - cfca_origin_ca_sites_config | type_debug == "list"
+    quiet: yes

@@ -1,0 +1,3 @@
+---
+cfca_repository_gpg_url: "{{ cfca_package_repository }}/cloudflare-main.gpg"
+cfca_repository_app: "{{ cfca_package_repository }}/ {{ ansible_lsb.codename | lower }} main"

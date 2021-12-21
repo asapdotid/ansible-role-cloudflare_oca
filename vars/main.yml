@@ -1,0 +1,6 @@
+---
+cfca_package_repository: "http://pkg.cloudflare.com"
+cfca_origin_rsa_ca_root_url: "https://developers.cloudflare.com/ssl/e2b9968022bf23b071d95229b5678452/origin_ca_rsa_root.pem"
+cfca_origin_ecc_ca_root_url: "https://developers.cloudflare.com/ssl/0d2cd0f374da0fb6dbf53128b60bbbf7/origin_ca_ecc_root.pem"
+
+cfca_origin_ca_root: "{{ cfca_origin_rsa_ca_root_url if cfca_origin_ca_root_type == 'rsa' else cfca_origin_ecc_ca_root_url }}"

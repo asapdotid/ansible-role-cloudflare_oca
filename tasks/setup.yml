@@ -1,0 +1,70 @@
+---
+- name: CF OCA | Setup on {{ ansible_facts['distribution'] }}
+  block:
+    - name: CF OCA | Add Cloudflare key on {{ ansible_facts['distribution'] }}
+      ansible.builtin.apt_key:
+        url: "{{ cfca_repository_gpg_url }}"
+        state: present
+
+    - name: CF OCA | Add Cloudflare repository on {{ ansible_facts['distribution'] }}
+      ansible.builtin.apt_repository:
+        repo: "deb {{ cfca_repository_app }}"
+        state: present
+      register: added_result
+
+    - name: CF OCA | Install Cloudflare Origin Server CA on {{ ansible_facts['distribution'] }}
+      ansible.builtin.apt:
+        name: "{{ cfca_package_name }}"
+        state: "{{ cfca_package_state }}"
+        update_cache: yes
+        cache_valid_time: 3600
+      when:
+        - added_result.rc == 0
+
+  when:
+    - ansible_os_family == "Debian"
+
+  rescue:
+    - name: Print when errors
+      ansible.builtin.debug:
+        msg: "I caught an error, can do stuff here to fix it, :-)"
+
+- name: OCA | Setup on {{ ansible_facts['distribution'] }}
+  block:
+    - name: OCA | Add Cloudflare key on {{ ansible_facts['distribution'] }}
+      ansible.builtin.rpm_key:
+        state: present
+        key: "{{ cfca_repository_gpg_url }}"
+
+    - name: OCA | Add Cloudflare repository on {{ ansible_facts['distribution'] }}
+      ansible.builtin.yum:
+        name: "{{ cfca_repository_app }}"
+        state: present
+        update_cache: yes
+      register: added_result
+
+    - name: CF OCA | Install Cloudflare Origin Server CA on {{ ansible_facts['distribution'] }}
+      ansible.builtin.yum:
+        name: "{{ cfca_package_name }}"
+        state: "{{ cfca_package_state }}"
+      register: package_install
+      when:
+        - added_result.rc == 0
+
+    - name: CF OCA | Create a symbolic link Cloudflare Origin Server CA on {{ ansible_facts['distribution'] }}
+      ansible.builtin.file:
+        src: /rpm/usr/local/bin/cfca
+        dest: /usr/bin/cfca
+        owner: root
+        group: root
+        state: link
+      when:
+        - package_install.rc == 0
+
+  when:
+    - ansible_os_family == "RedHat"
+
+  rescue:
+    - name: Print when errors
+      ansible.builtin.debug:
+        msg: "I caught an error, can do stuff here to fix it, :-)"
