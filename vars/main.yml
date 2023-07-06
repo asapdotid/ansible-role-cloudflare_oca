@@ -1,5 +1,5 @@
 ---
-cfca_package_repository: "http://pkg.cloudflare.com"
+cfca_package_repository: "https://pkg.cloudflare.com"
 cfca_origin_rsa_ca_root_url: "https://developers.cloudflare.com/ssl/static/origin_ca_rsa_root.pem"
 cfca_origin_ecc_ca_root_url: "https://developers.cloudflare.com/ssl/static/origin_ca_ecc_root.pem"
 
