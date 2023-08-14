@@ -1,20 +1,27 @@
+---
 galaxy_info:
+  role_name: cloudflare_oca
   author: Asapdotid
   description: Add Cloudflare Origin CA as a SSL provider
-  company: Asapdotid
-  issue_tracker_url: https://github.com/asapdotid/ansible-role-cloudflare_oca/issues
+  company: none
   license: MIT
-  min_ansible_version: 2.10
+
+  min_ansible_version: "2.10"
+
   platforms:
+    - name: EL
+      versions:
+        - all
+    - name: Debian
+      versions:
+        - all
     - name: Ubuntu
       versions:
-        - bionic
-        - focal
-    - name: CentOS
-      versions:
-        - 7
+        - all
+
   galaxy_tags:
-    - cloudflare
     - ssl
+    - cloudflare
     - https
+
 dependencies: []

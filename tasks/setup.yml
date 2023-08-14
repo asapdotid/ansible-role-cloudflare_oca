@@ -1,5 +1,7 @@
 ---
 - name: CF OCA | Setup on {{ ansible_facts['distribution'] }}
+  when:
+    - ansible_os_family == "Debian"
   block:
     - name: CF OCA | Add Cloudflare key on {{ ansible_facts['distribution'] }}
       ansible.builtin.apt_key:
@@ -16,13 +18,10 @@
       ansible.builtin.apt:
         name: "{{ cfca_package_name }}"
         state: "{{ cfca_package_state }}"
-        update_cache: yes
+        update_cache: true
         cache_valid_time: 3600
       when:
         - added_result.rc == 0
-
-  when:
-    - ansible_os_family == "Debian"
 
   rescue:
     - name: Print when errors
@@ -30,6 +29,8 @@
         msg: "I caught an error, can do stuff here to fix it, :-)"
 
 - name: OCA | Setup on {{ ansible_facts['distribution'] }}
+  when:
+    - ansible_os_family == "RedHat"
   block:
     - name: OCA | Add Cloudflare key on {{ ansible_facts['distribution'] }}
       ansible.builtin.rpm_key:
@@ -40,7 +41,7 @@
       ansible.builtin.yum:
         name: "{{ cfca_repository_app }}"
         state: present
-        update_cache: yes
+        update_cache: true
       register: added_result
 
     - name: CF OCA | Install Cloudflare Origin Server CA on {{ ansible_facts['distribution'] }}
@@ -60,9 +61,6 @@
         state: link
       when:
         - package_install.rc == 0
-
-  when:
-    - ansible_os_family == "RedHat"
 
   rescue:
     - name: Print when errors

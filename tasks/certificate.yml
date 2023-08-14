@@ -3,13 +3,13 @@
   ansible.builtin.file:
     path: "{{ cfca_origin_ca_ssl_path }}"
     state: directory
-    mode: 0755
+    mode: '0755'
 
 - name: CF OCA | Add Cloudflare Origin CA root certificates
   ansible.builtin.get_url:
     url: "{{ cfca_origin_ca_root }}"
     dest: "{{ cfca_origin_ca_ssl_path }}"
-    mode: 0600
+    mode: '0600'
 
 - name: CF OCA | Generate Cloudflare Origin CA
   ansible.builtin.command: "cfca getcert \
@@ -25,7 +25,7 @@
     creates: "{{ item.name }}.*"
   environment:
     CF_API_KEY: "{{ cfca_cloudflare_origin_ca_key | mandatory }}"
-  become: yes
+  become: true
   become_user: root
   no_log: "{{ cfca_origin_ca_no_log }}"
   loop: "{{ cfca_origin_ca_sites_config }}"
